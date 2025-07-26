@@ -20,7 +20,7 @@ export class CreateUserDto {
 
   @ApiProperty({ example: 'password123' })
   @IsString()
-  @MinLength(6)
+  @MinLength(6, { message: 'Password must be at least 6 characters long' })
   password: string;
 
   @ApiProperty({ enum: UserRole, example: UserRole.PATIENT })

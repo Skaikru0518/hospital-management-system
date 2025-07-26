@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateMedicalRecordDto {
   @ApiProperty({ example: 'description...' })
@@ -18,12 +24,15 @@ export class CreateMedicalRecordDto {
   @IsNumber()
   doctor_id: number;
 
-  @ApiProperty({ example: 1 })
-  @IsNumber()
-  diagnosis_id: number;
+  @ApiProperty({ type: [Number], example: [1, 2, 3] })
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNumber({}, { each: true })
+  disease_ids: number[];
 
-  @ApiProperty({ example: 1, required: false })
+  @ApiProperty({ type: [Number], example: [1, 2], required: false })
+  @IsArray()
   @IsOptional()
-  @IsNumber()
-  medication_id?: number;
+  @IsNumber({}, { each: true })
+  medication_ids?: number[];
 }

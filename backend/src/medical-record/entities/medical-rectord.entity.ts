@@ -4,6 +4,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Patient } from 'src/patient/entities/patient.entity';
@@ -35,13 +37,21 @@ export class MedicalRecord {
   @Column({ length: 255, nullable: true })
   attachment: string;
 
-  @ApiProperty({ type: () => Disease })
-  @ManyToOne(() => Disease, { eager: true })
-  @JoinColumn({ name: 'diagnosis_id' })
-  diagnosis: Disease;
+  @ApiProperty({ type: () => [Disease] })
+  @ManyToMany(() => Disease, { eager: true })
+  @JoinTable({
+    name: 'medical_record_diseases',
+    joinColumn: { name: 'medical_record_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'disease_id', referencedColumnName: 'id' },
+  })
+  diseases: Disease[];
 
-  @ApiProperty({ type: () => Medication, required: false })
-  @ManyToOne(() => Medication, { eager: true, nullable: true })
-  @JoinColumn({ name: 'medication_id' })
-  medication: Medication;
+  @ApiProperty({ type: () => [Medication] })
+  @ManyToMany(() => Medication, { eager: true })
+  @JoinTable({
+    name: 'medical_record_medications',
+    joinColumn: { name: 'medical_record_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'medication_id', referencedColumnName: 'id' },
+  })
+  medications: Medication[];
 }

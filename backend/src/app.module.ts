@@ -10,6 +10,7 @@ import { MedicalRecordModule } from './medical-record/medical-record.module';
 import { PatientModule } from './patient/patient.module';
 import { DiseasesModule } from './diseases/diseases.module';
 import { MedicationsModule } from './medications/medications.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MedicationsModule } from './medications/medications.module';
     PatientModule,
     DiseasesModule,
     MedicationsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
