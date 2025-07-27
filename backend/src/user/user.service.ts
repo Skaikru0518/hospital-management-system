@@ -70,7 +70,7 @@ export class UserService {
     }
 
     if (updateUserDto.password) {
-      const saltRounds = 10;
+      const saltRounds = 12;
       updateUserDto.password = await bcrypt.hash(
         updateUserDto.password,
         saltRounds,
