@@ -10,7 +10,7 @@ import { User } from '../../user/entities/user.entity';
 
 export enum MedicalFields {
   GENERAL_MEDICINE = 'general_medicine',
-  INTERNAL_MEDICINE = 'interlan_medicine',
+  INTERNAL_MEDICINE = 'internal_medicine',
   CARDIOLOGY = 'cardiology',
   ENDOCRINOLOGY = 'endocrinology',
   GASTROENTEROLOGY = 'gastroenterology',
