@@ -40,12 +40,12 @@ export class MedicationsController {
     return this.medicationService.findOne(Number(id));
   }
 
-  @Put('id')
+  @Put(':id')
   update(@Param('id') id: number, updateMedicationDto: UpdateMedicationDto) {
     return this.medicationService.update(Number(id), updateMedicationDto);
   }
 
-  @Delete('id')
+  @Delete(':id')
   remove(@Param('id') id: number) {
     return this.medicationService.remove(Number(id));
   }

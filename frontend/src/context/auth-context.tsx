@@ -1,0 +1,89 @@
+import type { AuthContextType } from '@/types/AuthContextType';
+import type { UserType } from '@/types/UserType';
+import { apiPaths } from '@/lib/api-paths';
+import { axiosInstance } from '@/lib/axios';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
+import type { ReactNode } from 'react';
+import type { AuthResponseType } from '@/types/AuthResponseType';
+import type { RegisterDataType } from '@/types/RegisterDataType';
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    //check for existing auth data on mount
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('user');
+
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (error: any) {
+        console.log(`AuthContext error: ${error}`);
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
+  const login = useCallback(async (email: string, password: string) => {
+    const response = await axiosInstance.post<AuthResponseType>(
+      apiPaths.auth.login,
+      {
+        email,
+        password,
+      },
+    );
+
+    const { access_token, user } = response.data;
+
+    localStorage.setItem('authToken', access_token);
+    localStorage.setItem('user', JSON.stringify(user));
+    setUser(user);
+  }, []);
+
+  const register = useCallback(async (userData: RegisterDataType) => {
+    await axiosInstance.post<UserType>(apiPaths.user.createUser, userData);
+    await login(userData.email, userData.password);
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    setUser(null);
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      login,
+      register,
+      logout,
+      setUser,
+    }),
+    [user, isLoading, login, register, logout],
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
