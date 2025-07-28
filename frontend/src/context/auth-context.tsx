@@ -13,6 +13,7 @@ import {
 import type { ReactNode } from 'react';
 import type { AuthResponseType } from '@/types/AuthResponseType';
 import type { RegisterDataType } from '@/types/RegisterDataType';
+import { toast } from 'sonner';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -37,31 +38,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const response = await axiosInstance.post<AuthResponseType>(
-      apiPaths.auth.login,
-      {
-        email,
-        password,
-      },
-    );
+  const login = useCallback(
+    async (email: string, password: string): Promise<boolean> => {
+      try {
+        const response = await axiosInstance.post<AuthResponseType>(
+          apiPaths.auth.login,
+          { email, password },
+        );
+        const { access_token, user } = response.data;
+        localStorage.setItem('authToken', access_token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
 
-    const { access_token, user } = response.data;
-
-    localStorage.setItem('authToken', access_token);
-    localStorage.setItem('user', JSON.stringify(user));
-    setUser(user);
-  }, []);
+        return true;
+      } catch (error: any) {
+        console.error('Login error', error);
+        return false;
+      }
+    },
+    [],
+  );
 
   const register = useCallback(async (userData: RegisterDataType) => {
-    await axiosInstance.post<UserType>(apiPaths.user.createUser, userData);
-    await login(userData.email, userData.password);
+    try {
+      await axiosInstance.post<UserType>(apiPaths.user.createUser, userData);
+      await login(userData.email, userData.password);
+      toast.success('Register success');
+    } catch (error) {
+      console.error('Register error', error);
+      toast.error('Register failed');
+    }
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     setUser(null);
+    toast.success('Logout successful');
   }, []);
 
   const value = useMemo(

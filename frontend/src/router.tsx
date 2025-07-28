@@ -12,6 +12,7 @@ import NotFound from './components/layouts/not-found.tsx';
 import AdminDashboard from './pages/admin/admin-dashboard.tsx';
 import DoctorDashboard from './pages/doctor/doctor-dashboard.tsx';
 import PatientDashboard from './pages/patient/patient-dashboard.tsx';
+import Unauthorized from './components/layouts/unauthorized.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
+      { path: 'unauthorized', element: <Unauthorized /> },
       {
         path: 'dashboard',
         element: (

@@ -31,13 +31,13 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      login(values.email, values.password);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const success = await login(values.email, values.password);
+
+    if (success) {
       toast.success('Login succesful');
       navigate('/');
-    } catch (error) {
-      console.error(error);
+    } else {
       toast.error('Login failed');
     }
   }
