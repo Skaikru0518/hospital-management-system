@@ -1,4 +1,9 @@
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { DoctorCardProps } from '@/interface/DoctorCardProps';
 
@@ -11,9 +16,12 @@ export function DoctorCard({
 }: DoctorCardProps) {
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <div className="aspect-video overflow-hidden">
-        <img src={image} alt={name} className="w-full h-full object-cover" />
-      </div>
+      <CardHeader>
+        <div className="overflow-hidden flex items-center justify-center">
+          <img src={image} alt={name} className="h-64 w-64 object-cover" />
+        </div>
+      </CardHeader>
+
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg">{name}</h3>
         <p className="text-primary font-medium">{specialty}</p>
@@ -29,7 +37,9 @@ export function DoctorCard({
         </span>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full">Book</Button>
+        <Button className="w-full hover:cursor-pointer">
+          Book Appointment
+        </Button>
       </CardFooter>
     </Card>
   );

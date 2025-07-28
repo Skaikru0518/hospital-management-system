@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,6 +39,18 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* custom colors */
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-light: var(--brand-blue-light);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-dark: var(--brand-teal-dark);
+  --color-brand-white: var(--brand-white);
+  --color-brand-gray: var(--brand-gray);
+  --color-brand-gray-dark: var(--brand-gray-dark);
+  --color-brand-success: var(--brand-success);
+  --color-brand-warning: var(--brand-warning);
+  --color-brand-danger: var(--brand-danger);
 }
 
 :root {
@@ -74,6 +86,18 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* custom colors */
+  --brand-blue: #2563eb;
+  --brand-blue-light: #3b82f6;
+  --brand-teal: #14b8a6;
+  --brand-teal-dark: #0d9488;
+  --brand-white: #fff;
+  --brand-gray: #f3f4f6;
+  --brand-gray-dark: #27272a;
+  --brand-success: #22c55e;
+  --brand-warning: #eab308;
+  --brand-danger: #ef4444;
 }
 
 .dark {
@@ -108,6 +132,12 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* custom colors */
+  --brand-blue: #3b82f6;
+  --brand-teal: #2dd4bf;
+  --brand-white: #18181b;
+  --brand-gray: #27272a;
 }
 
 @layer base {
@@ -118,3 +148,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* @layer utilities {
+  .bg-brand-blue {
+    @apply bg-[var(--brand-blue)];
+  }
+
+  .bg-brand-blue-light {
+    @apply bg-[var(--brand-blue-light)];
+  }
+} */

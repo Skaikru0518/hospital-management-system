@@ -7,9 +7,58 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Header } from '@/components/layouts/header';
+import Footer from '@/components/layouts/footer';
+import { useAuth } from '@/context/auth-context';
 const Home = () => {
+  const { isAuthenticated } = useAuth();
   return (
     <div className="flex flex-col min-h-screen">
+      <Header />
+
+      {/* Hero Section*/}
+      <section className="bg-gradient-to-br from-blue-500 via-white to-teal-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                  Quality Healthcare
+                  <span className="block bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
+                    When you need it
+                  </span>
+                </h1>
+                <p className="text-xl text-muted-foreground leading-relaxed">
+                  Connect with experienced medical professionals and receive
+                  personalized care tailored to your unique health needs
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="text-lg px-8">
+                  <Link to="/doctors">Find a doctor</Link>
+                </Button>
+                {isAuthenticated ? (
+                  ''
+                ) : (
+                  <Button className="text-lg px-8" size="lg" variant="outline">
+                    Log in to your account
+                  </Button>
+                )}
+              </div>
+            </div>
+            {/* Kép csak sm-től felfelé látszik */}
+            <div className="relative hidden sm:block">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-600 rounded-2xl transform rotate-6" />
+              <img
+                src="/images/bg/hospital.jpg"
+                alt="hospital"
+                className="relative rounded-2xl shadow-2xl w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -57,14 +106,47 @@ const Home = () => {
             {doctors.map((doctor) => (
               <DoctorCard key={doctor.id} {...doctor} />
             ))}
+            <div>
+              <Button variant={'outline'} size={'lg'} asChild>
+                <Link to={'/doctors'}> View all doctors</Link>
+              </Button>
+            </div>
           </div>
-          <div>
-            <Button variant={'outline'} size={'lg'} asChild>
-              <Link to={'/doctors'}> View all doctors</Link>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-teal-600 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Reado to Take Control of Your Health?
+          </h2>
+          <p className="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
+            Join thousands of patients who trust MedCare for their healthcare
+            needs. Schedule your appointment today and experience exceptional
+            medical care.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size={'lg'}
+              variant={'secondary'}
+              className="text-lg px-8"
+              asChild
+            >
+              <Link to={'/register'}>Get Started</Link>
+            </Button>
+            <Button
+              className="text-lg px-8 text-black"
+              asChild
+              size={'lg'}
+              variant={'outline'}
+            >
+              <Link to={'/contact'}>Contact Us</Link>
             </Button>
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

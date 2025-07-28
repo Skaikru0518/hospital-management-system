@@ -1,14 +1,17 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ProtectedRoute from './components/layouts/ProtectedRoute';
-import Dashboard from './pages/Dashboard';
-import AdminUsers from './pages/AdminUsers';
-import AdminMedications from './pages/AdminMedications';
-import DoctorPatients from './pages/DoctorPatients';
-import PatientRecord from './pages/PatientRecord';
-import NotFound from './components/layouts/NotFound';
+import Home from './pages/home';
+import Login from './pages/login';
+import Register from './pages/register';
+import ProtectedRoute from './components/layouts/protected-route.tsx';
+import Dashboard from './pages/dashboard';
+import AdminUsers from './pages/admin/admin-users.tsx';
+import AdminMedications from './pages/admin/admin-medications.tsx';
+import DoctorPatients from './pages/doctor/patient-record';
+import PatientRecord from './pages/doctor/patients.tsx';
+import NotFound from './components/layouts/not-found.tsx';
+import AdminDashboard from './pages/admin/admin-dashboard.tsx';
+import DoctorDashboard from './pages/doctor/doctor-dashboard.tsx';
+import PatientDashboard from './pages/patient/patient-dashboard.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +31,22 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'patient/dashboard',
+        element: (
+          <ProtectedRoute>
+            <PatientDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'admin/dashboard',
+        element: (
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: 'admin/users',
         element: (
           <ProtectedRoute allowedRoles={['admin']}>
@@ -40,6 +59,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={['admin']}>
             <AdminMedications />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'doctor/dashboard',
+        element: (
+          <ProtectedRoute>
+            <DoctorDashboard />
           </ProtectedRoute>
         ),
       },

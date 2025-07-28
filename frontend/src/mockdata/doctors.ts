@@ -4,8 +4,7 @@ export const doctors = [
     name: 'Dr. Sarah Johnson',
     specialty: 'Cardiology',
     experience: 12,
-    image:
-      'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    image: '/images/doctors/4.jpg',
     rating: 4.8,
   },
   {
@@ -13,8 +12,7 @@ export const doctors = [
     name: 'Dr. Michael Chen',
     specialty: 'Neurology',
     experience: 15,
-    image:
-      'https://images.pexels.com/photos/3822983/pexels-photo-3822983.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    image: '/images/doctors/1.jpg',
     rating: 4.9,
   },
   {
@@ -22,8 +20,7 @@ export const doctors = [
     name: 'Dr. Emily Rodriguez',
     specialty: 'Pediatrics',
     experience: 8,
-    image:
-      'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    image: '/images/doctors/3.jpg',
     rating: 4.7,
   },
   {
@@ -31,8 +28,7 @@ export const doctors = [
     name: 'Dr. James Wilson',
     specialty: 'Orthopedics',
     experience: 20,
-    image:
-      'https://images.pexels.com/photos/3822983/pexels-photo-3822983.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    image: '/images/doctors/2.jpg',
     rating: 4.9,
   },
 ];
