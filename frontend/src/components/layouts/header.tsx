@@ -11,6 +11,34 @@ export function Header() {
     navigate('/');
   };
 
+  const getDashboardLink = () => {
+    if (!user) return '/';
+    switch (user.role) {
+      case 'admin':
+        return '/admin/dashboard';
+      case 'doctor':
+        return '/doctor/dashboard';
+      case 'patient':
+        return '/patient/dashboard';
+      default:
+        return '/';
+    }
+  };
+
+  const getDashboardLabel = () => {
+    if (!user) return 'Dashboard';
+    switch (user.role) {
+      case 'admin':
+        return 'Admin Dashboard';
+      case 'doctor':
+        return 'Doctor Dashboard';
+      case 'patient':
+        return 'Patient Dashboard';
+      default:
+        return 'Dashboard';
+    }
+  };
+
   return (
     <header className="border-b">
       <div className="container mx-auto p-4 flex items-center justify-between">
@@ -22,29 +50,37 @@ export function Header() {
 
         <nav className="hidden md:flex items-center space-x-6">
           <Link
-            className="text-md font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
             to={'/'}
           >
             Home
           </Link>
           <Link
-            className="text-md font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
             to={'/doctors'}
           >
             Doctors
           </Link>
           <Link
-            className="text-md font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
             to={'/services'}
           >
             Services
           </Link>
           <Link
-            className="text-md font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
             to={'/about'}
           >
             About
           </Link>
+          {isAuthenticated && (
+            <Link
+              className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
+              to={getDashboardLink()}
+            >
+              {getDashboardLabel()}
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center space-x-4">

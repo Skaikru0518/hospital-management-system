@@ -17,7 +17,7 @@ export class DoctorService {
   }
 
   async findAll(): Promise<Doctor[]> {
-    return this.doctorRepository.find();
+    return this.doctorRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: number): Promise<Doctor> {

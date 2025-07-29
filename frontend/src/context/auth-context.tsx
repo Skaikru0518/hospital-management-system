@@ -19,7 +19,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [userCount, setUserCount] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     //check for existing auth data on mount
@@ -77,6 +78,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     toast.success('Logout successful');
   }, []);
 
+  const getUserCount = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<UserType[]>(
+        apiPaths.user.getUsers,
+      );
+      const users = response.data;
+      return users.length;
+    } catch (error: any) {
+      console.error(error);
+      return 0;
+    }
+  }, []);
+
+  const getDoctorCount = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<UserType[]>(
+        apiPaths.user.getUsers,
+      );
+      const users = response.data;
+      const doctors = users.filter((user) => user.role === 'doctor');
+      return doctors.length;
+    } catch (error: any) {
+      console.error(error);
+      return 0;
+    }
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -86,6 +114,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       register,
       logout,
       setUser,
+      getUserCount,
+      getDoctorCount,
     }),
     [user, isLoading, login, register, logout],
   );

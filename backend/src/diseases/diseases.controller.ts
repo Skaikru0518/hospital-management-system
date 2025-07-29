@@ -1,12 +1,15 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, Param, Query } from '@nestjs/common';
 import { DiseasesService } from './diseases.service';
 import { Disease } from './entities/disease.entity';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('diseases')
 export class DiseasesController {
   constructor(private readonly diseasesService: DiseasesService) {}
 
   @Get()
+  @HttpCode(200)
+  @Roles('admin', 'doctor')
   async findAll(
     @Query('search') search?: string,
     @Query('page') page = 1,
@@ -21,6 +24,8 @@ export class DiseasesController {
   }
 
   @Get(':id')
+  @HttpCode(200)
+  @Roles('admin', 'doctor')
   findOne(@Param('id') id: number) {
     return this.diseasesService.findOne(Number(id));
   }

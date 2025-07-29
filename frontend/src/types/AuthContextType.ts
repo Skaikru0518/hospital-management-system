@@ -8,4 +8,6 @@ export interface AuthContextType {
   register: (userData: any) => Promise<void>;
   logout: () => void;
   setUser: (user: UserType | null) => void;
+  getUserCount: () => Promise<number>;
+  getDoctorCount: () => Promise<number>;
 }
