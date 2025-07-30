@@ -3,6 +3,8 @@ import AdminDataTalbe from '@/components/tables/admin-data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth-context';
+import { apiPaths } from '@/lib/api-paths';
+import { axiosInstance } from '@/lib/axios';
 
 import { Calendar, FileText, Stethoscope, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -17,6 +19,11 @@ const AdminDashboard = () => {
     getDoctorCount().then(setDoctorCount);
   }, []);
 
+  const fetchData = async () => {
+    const response = await axiosInstance.get(apiPaths.patient.getPatient);
+    console.log(response.data);
+  };
+
   return (
     <>
       <Header />
@@ -27,7 +34,7 @@ const AdminDashboard = () => {
             Manage users, medications and system settings
           </p>
         </div>
-        <Button>Test</Button>
+        <Button onClick={() => fetchData()}>Test</Button>
 
         {/* INFO CARDS */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

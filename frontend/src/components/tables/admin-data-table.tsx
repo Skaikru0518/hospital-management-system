@@ -31,31 +31,58 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [editItem, setEditItem] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
+  const limitPerPage = 25;
 
-  const { getUserCount, getDoctorCount } = useAuth();
+  // const { getUserCount, getDoctorCount } = useAuth();
 
   const fetchData = async () => {
     setLoading(true);
     try {
       switch (selectedType) {
-        case 'users':
+        case 'users': {
           const users = await axiosInstance.get(apiPaths.user.getUsers);
-          setData(users.data); // placeholder
+          setTotal(users.data.length);
+          setData(
+            users.data.slice((page - 1) * limitPerPage, page * limitPerPage),
+          ); // placeholder
           break;
-        case 'doctors':
+        }
+        case 'doctors': {
           const doctors = await axiosInstance.get(apiPaths.doctor.getDoctor);
-          setData(doctors.data);
+          setTotal(doctors.data.length);
+          setData(
+            doctors.data.slice((page - 1) * limitPerPage, page * limitPerPage),
+          );
           break;
-        case 'patients':
+        }
+        case 'patients': {
           const patients = await axiosInstance.get(apiPaths.patient.getPatient);
-          setData(patients.data);
+          setTotal(patients.data.length);
+          setData(
+            patients.data.slice((page - 1) * limitPerPage, page * limitPerPage),
+          );
           break;
-        case 'medications':
-          // const medications = await getMedications(); // majd implementálod
+        }
+        case 'medications': {
+          const medications = await axiosInstance.get(
+            apiPaths.medications.getMedications({
+              page: page,
+              limit: limitPerPage,
+            }),
+          );
+          setData(medications.data.data);
+          setTotal(medications.data.total);
+          break;
+        }
+        default:
           setData([]);
-          break;
+          setTotal(0);
       }
     } catch (error) {
+      setData([]);
+      setTotal(0);
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
@@ -63,8 +90,12 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
   };
 
   useEffect(() => {
-    fetchData();
+    setPage(1);
   }, [selectedType]);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedType, page]);
 
   const handleEdit = (item: any) => {
     setEditItem(item);
@@ -104,9 +135,10 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
           'id',
           'insurance_no',
           'address',
-          'Birth',
-          'Phone',
-          'user_id',
+          'birth',
+          'phone',
+          'name',
+          'email',
           'Actions',
         ];
       case 'medications':
@@ -163,7 +195,7 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
                   </TableCell>
                 </TableRow>
               ) : (
-                data.map((item) => (
+                data.map((item: any) => (
                   <TableRow key={item.id}>
                     {getColumns().map((col) =>
                       col === 'Actions' ? (
@@ -191,7 +223,11 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
                             ? item.user?.name || '-'
                             : selectedType === 'doctors' && col === 'email'
                               ? item.user?.email || '-'
-                              : (item[col] ?? '-')}
+                              : selectedType === 'patients' && col === 'name'
+                                ? item.user?.name || '-'
+                                : selectedType === 'patients' && col === 'email'
+                                  ? item.user?.email || '-'
+                                  : (item[col] ?? '-')}
                         </TableCell>
                       ),
                     )}
@@ -201,15 +237,35 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
             </TableBody>
           </Table>
         )}
-
-        <EditDialog
-          isOpen={isEditDialogOpen}
-          onClose={() => setIsEditDialogOpen(false)}
-          onSave={handleSave}
-          item={editItem}
-          type={selectedType}
-        />
+        <div className="flex justify-center items-center mt-5 space-x-2">
+          <Button
+            variant={'outline'}
+            size={'sm'}
+            disabled={page === 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+          >
+            Pervious
+          </Button>
+          <span>
+            Page {page} / {Math.ceil(total / limitPerPage) || 1}
+          </span>
+          <Button
+            variant={'outline'}
+            size={'sm'}
+            disabled={page >= Math.ceil(total / limitPerPage)}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </Button>
+        </div>
       </CardContent>
+      <EditDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        onSave={handleSave}
+        item={editItem}
+        type={selectedType}
+      />
     </Card>
   );
 }

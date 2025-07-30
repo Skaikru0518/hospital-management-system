@@ -21,7 +21,7 @@ export class Patient {
 
   @ApiProperty()
   @Column({ name: 'insurance_no', length: 50, nullable: true })
-  insuranceNu: string;
+  insurance_no: string;
 
   @ApiProperty()
   @Column({ length: 255, nullable: true })
@@ -29,7 +29,7 @@ export class Patient {
 
   @ApiProperty()
   @Column({ name: 'date_of_birth', type: 'date', nullable: true })
-  dateOfBirt: Date;
+  birth: Date;
 
   @ApiProperty()
   @Column({ length: 30, nullable: true })

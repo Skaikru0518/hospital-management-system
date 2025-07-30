@@ -1,3 +1,3 @@
 export interface AdminDataTableProps {
-  classname?: string;
+  className?: string;
 }
