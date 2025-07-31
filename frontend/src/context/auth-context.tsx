@@ -14,12 +14,14 @@ import type { ReactNode } from 'react';
 import type { AuthResponseType } from '@/types/AuthResponseType';
 import type { RegisterDataType } from '@/types/RegisterDataType';
 import { toast } from 'sonner';
+import type { PatientType } from '@/types/PatientType';
+import type { AppointmentType } from '@/types/AppointmentType';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserType | null>(null);
-  const [userCount, setUserCount] = useState<number>(0);
+  const [patient, setPatient] = useState<PatientType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -38,6 +40,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    if (user?.role === 'patient') {
+      getPatientData(Number(user.id));
+    }
+  }, [user]);
 
   const login = useCallback(
     async (email: string, password: string): Promise<boolean> => {
@@ -105,9 +113,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const getAppontmentCount = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<AppointmentType[]>(
+        apiPaths.appointment.getAppointment,
+      );
+      const appointment = response.data;
+      return appointment.length;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  }, []);
+
+  const getPatientData = useCallback(
+    async (id: number) => {
+      try {
+        const response = await axiosInstance.get<PatientType>(
+          apiPaths.patient.getPatientByUserId(id),
+        );
+        setPatient(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [user],
+  );
+
   const value = useMemo(
     () => ({
       user,
+      patient,
       isAuthenticated: !!user,
       isLoading,
       login,
@@ -115,9 +151,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       setUser,
       getUserCount,
+      getAppontmentCount,
       getDoctorCount,
+      getPatientData,
     }),
-    [user, isLoading, login, register, logout],
+    [user, isLoading, login, register, logout, patient],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

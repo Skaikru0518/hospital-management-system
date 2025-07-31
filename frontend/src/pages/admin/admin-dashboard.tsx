@@ -12,11 +12,13 @@ import { useEffect, useState } from 'react';
 const AdminDashboard = () => {
   const [userCount, setUserCount] = useState<number>(0);
   const [doctorCount, setDoctorCount] = useState<number>(0);
-  const { getUserCount, getDoctorCount } = useAuth();
+  const [appoinmentCount, setAppointmentCount] = useState<number>(0);
+  const { getUserCount, getDoctorCount, getAppontmentCount } = useAuth();
 
   useEffect(() => {
     getUserCount().then(setUserCount);
     getDoctorCount().then(setDoctorCount);
+    getAppontmentCount().then(setAppointmentCount);
   }, []);
 
   const fetchData = async () => {
@@ -70,7 +72,7 @@ const AdminDashboard = () => {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">573</div>
+              <div className="text-2xl font-bold">{appoinmentCount}</div>
               <p className="text-xs text-muted-foreground">
                 +18% from last month
               </p>

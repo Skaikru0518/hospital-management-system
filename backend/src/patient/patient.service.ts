@@ -29,6 +29,14 @@ export class PatientService {
     return patient;
   }
 
+  async findByPatientUserId(userId: number): Promise<Patient | null> {
+    const patient = await this.patientRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+    return patient;
+  }
+
   async update(
     id: number,
     updatePatiendDto: UpdatePatientDto,
@@ -43,6 +51,33 @@ export class PatientService {
       );
     }
     return this.patientRepository.save(patient);
+  }
+
+  async updateByUserId(
+    userId: number,
+    updatePatiendDto: UpdatePatientDto,
+  ): Promise<Patient> {
+    const existingPatient = await this.patientRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+
+    if (!existingPatient) {
+      throw new NotFoundException(
+        `Patient with this userId ${userId} not found`,
+      );
+    }
+
+    const updatedPatient = await this.patientRepository.preload({
+      id: existingPatient.id,
+      ...updatePatiendDto,
+    });
+
+    if (!updatedPatient) {
+      throw new NotFoundException(`Patient could not be updated`);
+    }
+
+    return this.patientRepository.save(updatedPatient);
   }
 
   async remove(id: number): Promise<void> {

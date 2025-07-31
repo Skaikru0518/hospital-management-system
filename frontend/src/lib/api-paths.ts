@@ -35,6 +35,8 @@ export const apiPaths = {
     createPatient: '/patient',
     getPatient: '/patient',
     getPatientById: (id: number | string) => `/patient/${id}`,
+    getPatientByUserId: (id: number | string) => `/patient/by-user/${id}`,
+    updatePatientByUserId: (id: number | string) => `/patient/by-user/${id}`,
     updatePatient: (id: number | string) => `/patient/${id}`,
     deletePatient: (id: number | string) => `/patient/${id}`,
   },

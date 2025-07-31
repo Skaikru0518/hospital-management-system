@@ -13,6 +13,7 @@ import AdminDashboard from './pages/admin/admin-dashboard.tsx';
 import DoctorDashboard from './pages/doctor/doctor-dashboard.tsx';
 import PatientDashboard from './pages/patient/patient-dashboard.tsx';
 import Unauthorized from './components/layouts/unauthorized.tsx';
+import PatientDetails from './pages/patient/patient-details.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
             <PatientDashboard />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'patient/details',
+        element: <PatientDetails />,
       },
       {
         path: 'admin/dashboard',

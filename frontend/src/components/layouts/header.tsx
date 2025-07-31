@@ -1,15 +1,10 @@
 import { useAuth } from '@/context/auth-context';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
+import MenuDropDown from '../dropdowns/header-dropdown';
 
 export function Header() {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const { user, isAuthenticated } = useAuth();
 
   const getDashboardLink = () => {
     if (!user) return '/';
@@ -73,28 +68,17 @@ export function Header() {
           >
             About
           </Link>
-          {isAuthenticated && (
-            <Link
-              className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
-              to={getDashboardLink()}
-            >
-              {getDashboardLabel()}
-            </Link>
-          )}
         </nav>
 
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
-              <span className="text-sm font-medium">{user?.name}</span>
-              <Button
-                variant={'outline'}
-                className="text-black"
-                size={'sm'}
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
+              <span className="text-sm font-medium">Welcome, {user?.name}</span>
+
+              <MenuDropDown
+                menuItem={getDashboardLabel()}
+                link={getDashboardLink()}
+              />
             </>
           ) : (
             <>

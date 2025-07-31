@@ -5,8 +5,8 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
 } from '@nestjs/common';
 import { MedicationsService } from './medications.service';
@@ -48,7 +48,7 @@ export class MedicationsController {
     return this.medicationService.findOne(Number(id));
   }
 
-  @Put(':id')
+  @Patch(':id')
   @HttpCode(200)
   @Roles('admin', 'doctor')
   update(@Param('id') id: number, updateMedicationDto: UpdateMedicationDto) {

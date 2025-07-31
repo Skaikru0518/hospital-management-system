@@ -1,7 +1,9 @@
+import type { PatientType } from './PatientType';
 import type { UserType } from './UserType';
 
 export interface AuthContextType {
   user: UserType | null;
+  patient: PatientType | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
@@ -10,4 +12,5 @@ export interface AuthContextType {
   setUser: (user: UserType | null) => void;
   getUserCount: () => Promise<number>;
   getDoctorCount: () => Promise<number>;
+  getAppontmentCount: () => Promise<number>;
 }

@@ -5,8 +5,8 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -38,7 +38,7 @@ export class UserController {
     return this.userService.findOne(Number(id));
   }
 
-  @Put(':id')
+  @Patch(':id')
   @Roles('admin', 'doctor', 'receptionist')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(Number(id), updateUserDto);
