@@ -1,4 +1,5 @@
+import type { MenuItem } from '@/types/MenuItemType';
+
 export interface MenuDropDownProps {
-  link: string;
-  menuItem: string;
+  menuItem: MenuItem[];
 }

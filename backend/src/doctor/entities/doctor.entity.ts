@@ -69,4 +69,16 @@ export class Doctor {
   @ApiProperty()
   @Column({ length: 30, nullable: true })
   phone: string;
+
+  @ApiProperty()
+  @Column({ nullable: true, type: 'double' })
+  rating: number;
+
+  @ApiProperty({ description: 'image', type: String })
+  @Column({ nullable: true })
+  image: string;
+
+  @ApiProperty({ description: 'experience', type: 'integer', example: 1 })
+  @Column({ nullable: true })
+  experience: number;
 }

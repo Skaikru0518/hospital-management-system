@@ -16,6 +16,7 @@ import type { RegisterDataType } from '@/types/RegisterDataType';
 import { toast } from 'sonner';
 import type { PatientType } from '@/types/PatientType';
 import type { AppointmentType } from '@/types/AppointmentType';
+import type { DoctorType } from '@/types/DoctorType';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -113,6 +114,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const getDoctors = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get<DoctorType[]>(
+        apiPaths.doctor.getDoctor,
+      );
+      return response.data;
+    } catch (error: any) {
+      console.error(error);
+      return [];
+    }
+  }, []);
+
   const getAppontmentCount = useCallback(async () => {
     try {
       const response = await axiosInstance.get<AppointmentType[]>(
@@ -154,6 +167,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       getAppontmentCount,
       getDoctorCount,
       getPatientData,
+      getDoctors,
     }),
     [user, isLoading, login, register, logout, patient],
   );

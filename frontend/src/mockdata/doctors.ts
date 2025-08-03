@@ -18,7 +18,7 @@ export const doctors = [
   {
     id: '3',
     name: 'Dr. Emily Rodriguez',
-    specialty: 'Pediatrics',
+    specialty: 'Gynecology',
     experience: 8,
     image: '/images/doctors/3.jpg',
     rating: 4.7,
@@ -26,7 +26,7 @@ export const doctors = [
   {
     id: '4',
     name: 'Dr. James Wilson',
-    specialty: 'Orthopedics',
+    specialty: 'Rheumatology',
     experience: 20,
     image: '/images/doctors/2.jpg',
     rating: 4.9,

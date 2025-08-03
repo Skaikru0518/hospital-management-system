@@ -10,9 +10,24 @@ import {
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { axiosInstance } from '@/lib/axios';
+import { apiPaths } from '@/lib/api-paths';
+import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { MedicalFields } from '@/enums/MedicalFields';
+import { SurgicalField } from '@/enums/SurgicalFields';
 
-function EditDialog({ isOpen, onClose, onSave, item, type }: EditDialogProps) {
+function EditDialog({ isOpen, onClose, item, type }: EditDialogProps) {
   const [form, setForm] = useState<any>({});
+
+  const getEnumOptions = (enumObj: Record<string, string>) =>
+    Object.values(enumObj);
 
   useEffect(() => {
     if (!item) return;
@@ -33,7 +48,11 @@ function EditDialog({ isOpen, onClose, onSave, item, type }: EditDialogProps) {
         return [
           { key: 'name', label: 'Name' },
           { key: 'email', label: 'Email' },
-          { key: 'role', label: 'Role' },
+          {
+            key: 'role',
+            label: 'Role',
+            options: ['admin', 'doctor', 'patient', 'receptionist'],
+          },
         ];
       case 'doctors':
         return [
@@ -41,8 +60,16 @@ function EditDialog({ isOpen, onClose, onSave, item, type }: EditDialogProps) {
           { key: 'phone', label: 'Phone' },
           { key: 'name', label: 'Name' },
           { key: 'email', label: 'Email' },
-          { key: 'field', label: 'Field' },
-          { key: 'surgery', label: 'Surgery' },
+          {
+            key: 'field',
+            label: 'Field',
+            options: getEnumOptions(MedicalFields),
+          },
+          {
+            key: 'surgery',
+            label: 'Surgery',
+            options: getEnumOptions(SurgicalField),
+          },
         ];
       case 'patients':
         return [
@@ -64,9 +91,43 @@ function EditDialog({ isOpen, onClose, onSave, item, type }: EditDialogProps) {
     setForm((prev: any) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(form);
+    const newData = { ...form, updated_at: new Date().toISOString() };
+    let patchFn;
+
+    switch (type) {
+      case 'users':
+        patchFn = () =>
+          axiosInstance.patch(apiPaths.user.updateUser(form.id), newData);
+        break;
+      case 'doctors':
+        patchFn = () =>
+          axiosInstance.patch(apiPaths.doctor.updateDoctor(form.id), newData);
+        break;
+      case 'patients':
+        patchFn = () =>
+          axiosInstance.patch(apiPaths.patient.updatePatient(form.id), newData);
+        break;
+      case 'medications':
+        patchFn = () =>
+          axiosInstance.patch(
+            apiPaths.medications.updateMedication(form.id),
+            newData,
+          );
+        break;
+      default:
+        toast.error('Unknown type');
+        return;
+    }
+    try {
+      await patchFn();
+      toast.success('Updated');
+      onClose();
+    } catch (error) {
+      console.log(error);
+      toast.error('Could not be updated');
+    }
   };
 
   if (!item) return null;
@@ -82,11 +143,34 @@ function EditDialog({ isOpen, onClose, onSave, item, type }: EditDialogProps) {
           {getFields().map((field) => (
             <div key={field.key} className="space-y-2">
               <Label htmlFor={field.key}>{field.label}</Label>
-              <Input
-                id={field.key}
-                value={form[field.key] ?? ''}
-                onChange={(e) => handleChange(field.key, e.target.value)}
-              />
+              {field.options ? (
+                <Select
+                  value={form[field.key] ?? ''}
+                  onValueChange={(value) => handleChange(field.key, value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={`Select ${field.label}`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {field.options.map((option: string) => (
+                      <SelectItem key={option} value={option}>
+                        {option
+                          .replace(/_/g, ' ')
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  id={field.key}
+                  value={form[field.key] ?? ''}
+                  onChange={(e) => handleChange(field.key, e.target.value)}
+                  disabled={
+                    type === 'patients' && ['name', 'email'].includes(field.key)
+                  }
+                />
+              )}
             </div>
           ))}
           <DialogFooter>

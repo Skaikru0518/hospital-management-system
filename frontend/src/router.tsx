@@ -14,6 +14,8 @@ import DoctorDashboard from './pages/doctor/doctor-dashboard.tsx';
 import PatientDashboard from './pages/patient/patient-dashboard.tsx';
 import Unauthorized from './components/layouts/unauthorized.tsx';
 import PatientDetails from './pages/patient/patient-details.tsx';
+import Doctors from './pages/doctor/doctors.tsx';
+import Booked from './pages/doctor/booked.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -93,6 +95,8 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      { path: 'doctors/list', element: <Doctors /> },
+      { path: 'doctors/booked', element: <Booked /> },
     ],
   },
 ]);

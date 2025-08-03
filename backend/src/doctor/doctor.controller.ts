@@ -26,7 +26,7 @@ export class DoctorController {
 
   @Get()
   @HttpCode(200)
-  @Roles('admin', 'doctor')
+  @Roles('admin', 'doctor', 'patient')
   findAll() {
     return this.doctorService.findAll();
   }

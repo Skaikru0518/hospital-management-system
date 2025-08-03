@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/context/auth-context';
 import { Edit, Loader, Trash2 } from 'lucide-react';
 import EditDialog from '@/components/layouts/edit-dialog';
 import type { AdminDataTableProps } from '@/interface/AdminDataTableProps';
@@ -34,8 +33,6 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limitPerPage = 25;
-
-  // const { getUserCount, getDoctorCount } = useAuth();
 
   const fetchData = async () => {
     setLoading(true);
@@ -107,12 +104,6 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
       console.log('Delete:', id);
       fetchData();
     }
-  };
-
-  const handleSave = async (updatedItem: any) => {
-    console.log('Save', updatedItem);
-    setIsEditDialogOpen(false);
-    fetchData();
   };
 
   const getColumns = () => {
@@ -262,7 +253,6 @@ function AdminDataTalbe({ className }: AdminDataTableProps) {
       <EditDialog
         isOpen={isEditDialogOpen}
         onClose={() => setIsEditDialogOpen(false)}
-        onSave={handleSave}
         item={editItem}
         type={selectedType}
       />

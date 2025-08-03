@@ -2,35 +2,27 @@ import { useAuth } from '@/context/auth-context';
 import { Link } from 'react-router-dom';
 import { Button } from '../ui/button';
 import MenuDropDown from '../dropdowns/header-dropdown';
+import type { MenuItem } from '@/types/MenuItemType';
 
 export function Header() {
   const { user, isAuthenticated } = useAuth();
 
-  const getDashboardLink = () => {
-    if (!user) return '/';
+  const getMenuItems = (): MenuItem[] => {
+    if (!user) return [{ label: 'Home', link: '/' }];
     switch (user.role) {
       case 'admin':
-        return '/admin/dashboard';
+        return [{ label: 'Admin Dashboard', link: '/admin/dashboard' }];
       case 'doctor':
-        return '/doctor/dashboard';
+        return [{ label: 'Doctors Dashboard', link: '/doctor/dashboard' }];
       case 'patient':
-        return '/patient/dashboard';
+        return [
+          { label: 'Patient Dashboard', link: '/patient/dashboard' },
+          { label: 'Your Details', link: '/patient/details' },
+        ];
+      case 'receptionist':
+        return [];
       default:
-        return '/';
-    }
-  };
-
-  const getDashboardLabel = () => {
-    if (!user) return 'Dashboard';
-    switch (user.role) {
-      case 'admin':
-        return 'Admin Dashboard';
-      case 'doctor':
-        return 'Doctor Dashboard';
-      case 'patient':
-        return 'Patient Dashboard';
-      default:
-        return 'Dashboard';
+        return [];
     }
   };
 
@@ -52,7 +44,7 @@ export function Header() {
           </Link>
           <Link
             className="text-md font-medium text-black hover:text-brand-blue  transition-colors"
-            to={'/doctors'}
+            to={'/doctors/list'}
           >
             Doctors
           </Link>
@@ -75,10 +67,7 @@ export function Header() {
             <>
               <span className="text-sm font-medium">Welcome, {user?.name}</span>
 
-              <MenuDropDown
-                menuItem={getDashboardLabel()}
-                link={getDashboardLink()}
-              />
+              <MenuDropDown menuItem={getMenuItems()} />
             </>
           ) : (
             <>

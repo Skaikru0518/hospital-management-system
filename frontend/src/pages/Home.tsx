@@ -1,5 +1,3 @@
-import React from 'react';
-import { doctors } from '@/mockdata/doctors';
 import { DoctorCard } from '@/components/home/doctor-card';
 import { services } from '@/mockdata/services';
 import { ServiceCard } from '@/components/home/service-card';
@@ -10,7 +8,16 @@ import { Link } from 'react-router-dom';
 import { Header } from '@/components/layouts/header';
 import Footer from '@/components/layouts/footer';
 import { useAuth } from '@/context/auth-context';
+import { useEffect, useState } from 'react';
+import type { DoctorType } from '@/types/DoctorType';
+
 const Home = () => {
+  const [doctors, setDoctors] = useState<DoctorType[]>([]);
+  const { getDoctors } = useAuth();
+
+  useEffect(() => {
+    getDoctors().then(setDoctors);
+  }, []);
   const { isAuthenticated } = useAuth();
   return (
     <div className="flex flex-col min-h-screen">
@@ -102,16 +109,15 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {doctors.map((doctor) => (
               <DoctorCard key={doctor.id} {...doctor} />
             ))}
-            <div>
-              <Button variant={'outline'} size={'lg'} asChild>
-                <Link to={'/doctors'}> View all doctors</Link>
-              </Button>
-            </div>
+            <div></div>
           </div>
+          <Button variant={'outline'} size={'lg'} asChild className="mt-8">
+            <Link to={'/doctors'}> View all doctors</Link>
+          </Button>
         </div>
       </section>
 

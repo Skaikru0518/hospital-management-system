@@ -11,7 +11,7 @@ import { useAuth } from '@/context/auth-context';
 import type { MenuDropDownProps } from '@/interface/MenuDropDownProps';
 import { MenuIcon } from 'lucide-react';
 
-function MenuDropDown({ link, menuItem }: MenuDropDownProps) {
+function MenuDropDown({ menuItem }: MenuDropDownProps) {
   const { logout } = useAuth();
   const handleLogout = () => {
     logout();
@@ -28,13 +28,16 @@ function MenuDropDown({ link, menuItem }: MenuDropDownProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onSelect={() => navigate(`${link}`)}>
-          {menuItem}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-emerald-950" />
-        <DropdownMenuItem onSelect={() => handleLogout()}>
-          Logout
-        </DropdownMenuItem>
+        {menuItem.map((item) => (
+          <DropdownMenuItem
+            key={item.link}
+            onSelect={() => navigate(item.link)}
+          >
+            {item.label}
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={handleLogout}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
